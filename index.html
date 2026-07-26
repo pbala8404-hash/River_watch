@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaveripuram River Watch — Control Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <div class="brand-text">
+      <h1>River Watch</h1>
+      <p>Kaveripuram Basin &middot; Control Room</p>
+    </div>
+  </div>
+  <div class="topbar-status" id="topbarStatus">
+    <div class="status-item">
+      <span class="status-label">Stations</span>
+      <span class="status-value" id="stationCount">—</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label">Active danger</span>
+      <span class="status-value danger" id="dangerCount">—</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label">Sensor faults</span>
+      <span class="status-value fault" id="faultCount">—</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label">Local time</span>
+      <span class="status-value mono" id="clock">—</span>
+    </div>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- ===================== TASK 2: MAIN SCREEN ===================== -->
+  <section class="list-panel" aria-label="Water level readings">
+    <div class="list-controls">
+      <div class="search-wrap">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.4"/><path d="M11 11L14.5 14.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <input type="text" id="searchBox" placeholder="Search by location or device id…" autocomplete="off">
+      </div>
+      <div class="filter-wrap">
+        <label for="statusFilter">Status</label>
+        <select id="statusFilter">
+          <option value="all">All statuses</option>
+          <option value="normal">Normal</option>
+          <option value="warning">Warning</option>
+          <option value="danger">Danger</option>
+          <option value="fault">Fault</option>
+          <option value="unknown">Unknown / missing</option>
+        </select>
+      </div>
+      <div class="filter-wrap">
+        <label for="locationFilter">Location</label>
+        <select id="locationFilter">
+          <option value="all">All locations</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="result-count" id="resultCount" role="status" aria-live="polite">Loading readings…</div>
+
+    <div class="table-scroll">
+      <table class="readings-table">
+        <thead>
+          <tr>
+            <th>Location</th>
+            <th>Level</th>
+            <th class="pillar-col">Gauge</th>
+            <th>Status</th>
+            <th>Recorded at</th>
+            <th>Device</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- rows injected by app.js -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="empty-state" id="emptyState" hidden>
+      <p>No readings match this search and filter combination.</p>
+      <button id="clearFiltersBtn" type="button">Clear search &amp; filters</button>
+    </div>
+
+    <div class="error-state" id="errorState" hidden>
+      <p>Couldn't load reading data. <span id="errorDetail"></span></p>
+      <button id="retryBtn" type="button">Retry</button>
+    </div>
+  </section>
+
+  <!-- ===================== TASK 3: DETAIL / SUMMARY VIEW ===================== -->
+  <aside class="detail-panel" id="detailPanel" aria-label="Reading detail">
+    <div class="detail-empty" id="detailEmpty">
+      <p>Select a reading from the list to see its full detail and trend.</p>
+    </div>
+
+    <div class="detail-content" id="detailContent" hidden>
+      <button class="detail-close" id="detailClose" type="button" aria-label="Close detail">&times;</button>
+
+      <div class="derived-figure" id="derivedFigure">
+        <!-- top-of-panel derived stat, filled by JS -->
+      </div>
+
+      <h2 id="detailLocation">—</h2>
+      <p class="detail-sub" id="detailDevice">—</p>
+
+      <svg id="pillarGauge" class="pillar-gauge" viewBox="0 0 120 220" role="img" aria-label="Water level gauge"></svg>
+
+      <dl class="detail-fields" id="detailFields">
+        <!-- reading_id, water_level_m, status, recorded_at, device_id -->
+      </dl>
+
+      <div class="detail-history">
+        <h3>Recent readings at this station</h3>
+        <ul id="detailHistory"></ul>
+      </div>
+    </div>
+  </aside>
+
+</main>
+
+<footer class="footer">
+  <p>SIH 2026 &middot; Practical Assessment &middot; River Flood Early-Warning System &middot; Data refreshes from <code>data/readings.json</code></p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
